@@ -17,4 +17,6 @@ class StatsEnum
     public const TOTAL_POSTS_PER_WEEK = 'total-posts-per-week';
 
     public const AVERAGE_POST_NUMBER_PER_USER = 'average-posts-per-user';
+
+    public const AVERAGE_POST_NUMBER_PER_USER_PER_MONTH = 'average-posts-per-user-per-month';
 }
