@@ -25,7 +25,11 @@ class AveragePostPerUserPerMonth extends AbstractCalculator
      */
     protected function doAccumulate(SocialPostTo $postTo): void
     {
-        // @TODO: Implement
+        $key = $postTo->getAuthorName().' ('.$postTo->getAuthorId().')';
+        if(!isset($this->postCount[$key])){
+            $this->postCount[$key]=0;
+        }
+        $this->postCount[$key]++;
     }
 
     /**
@@ -33,7 +37,16 @@ class AveragePostPerUserPerMonth extends AbstractCalculator
      */
     protected function doCalculate(): StatisticsTo
     {
-        // @TODO: Implement
-        return new StatisticsTo();
+        $stats = new StatisticsTo();
+        foreach ($this->postCount as $authorUniqueKey => $postCount) {
+            $child = (new StatisticsTo())
+                ->setName($this->parameters->getStatName())
+                ->setSplitPeriod($authorUniqueKey)
+                ->setValue($postCount)
+                ->setUnits(self::UNITS);
+
+            $stats->addChild($child);
+        }
+        return $stats;
     }
 }
