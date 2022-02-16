@@ -28,28 +28,46 @@ class AveragePostPerUserPerMonthTest extends TestCase
     const USER_2_ID = '2';
     const USER_2_NAME = 'Tom Smith';
 
-    public function emptyStatsDataProvider(): array
+    public function __construct(?string $name = null, array $data = [], $dataName = '')
+    {
+        parent::__construct($name, $data, $dataName);
+        $statsCalculatorFactory = new StatisticsCalculatorFactory();
+        $this->statsService = new StatisticsService($statsCalculatorFactory);
+        $this->params = [
+            (new ParamsTo())->setStatName(StatsEnum::AVERAGE_POST_NUMBER_PER_USER_PER_MONTH)
+        ];
+    }
+
+    public function emptyStatsDataProvider()
     {
         $stats = $this->statsService->calculateStats($this->getEmptyPostSet(), $this->params);
-        return $this->flattenStats($stats);
+        yield [
+            $this->flattenStats($stats)
+        ];
     }
 
-    public function singleUserPostDataProvider(): array
+    public function singleUserPostDataProvider()
     {
         $stats = $this->statsService->calculateStats($this->getSingleUserPost(), $this->params);
-        return $this->flattenStats($stats);
+        yield [
+            $this->flattenStats($stats)
+        ];
     }
 
-    public function singleUserPostsDataProvider(): array
+    public function singleUserPostsDataProvider()
     {
         $stats = $this->statsService->calculateStats($this->getSingleUserPosts(), $this->params);
-        return $this->flattenStats($stats);
+        yield [
+            $this->flattenStats($stats)
+        ];
     }
 
-    public function twoUserPostsDataProvider(): array
+    public function twoUserPostsDataProvider()
     {
         $stats = $this->statsService->calculateStats($this->getTwoUserPosts(), $this->params);
-        return $this->flattenStats($stats);
+        yield [
+            $this->flattenStats($stats)
+        ];
     }
 
     public function flattenStats(StatisticsTo $stats) : array
@@ -63,43 +81,42 @@ class AveragePostPerUserPerMonthTest extends TestCase
         return $flattenStats;
     }
 
-    protected function setUp(): void
+    /**
+     * @dataProvider emptyStatsDataProvider
+     */
+    public function testNoStatsAvailable($statValues): void
     {
-        $statsCalculatorFactory = new StatisticsCalculatorFactory();
-        $this->statsService = new StatisticsService($statsCalculatorFactory);
-        $this->params = [
-            (new ParamsTo())->setStatName(StatsEnum::AVERAGE_POST_NUMBER_PER_USER_PER_MONTH)
-        ];
-    }
-
-    public function testNoStatsAvailable(): void
-    {
-        $statValues = $this->emptyStatsDataProvider();
         $this->assertEquals([], $statValues);
     }
 
-    public function testOneUserWithOnePost(): void
+    /**
+     * @dataProvider singleUserPostDataProvider
+     */
+    public function testOneUserWithOnePost($statValues): void
     {
-        $statValues = $this->singleUserPostDataProvider();
         $this->assertEquals(1, $statValues[self::USER_1_NAME.' ('.self::USER_1_ID.')']);
     }
 
-    public function testOneUserWithFivePosts(): void
+    /**
+     * @dataProvider singleUserPostsDataProvider
+     */
+    public function testOneUserWithFivePosts($statValues): void
     {
-        $statValues = $this->singleUserPostsDataProvider();
         $this->assertEquals(5, $statValues[self::USER_1_NAME.' ('.self::USER_1_ID.')']);
     }
 
-    public function testTwoUsersWithPosts(): void
+    /**
+     * @dataProvider twoUserPostsDataProvider
+     */
+    public function testTwoUsersWithPosts($statValues): void
     {
-        $statValues = $this->twoUserPostsDataProvider();
         $this->assertEquals(2, $statValues[self::USER_1_NAME.' ('.self::USER_1_ID.')']);
         $this->assertEquals(3, $statValues[self::USER_2_NAME.' ('.self::USER_2_ID.')']);
     }
 
     private function getSingleUserPost(): \Traversable
     {
-        yield (new SocialPostTo)->setAuthorId(self::USER_1_ID)->setAuthorName(self::USER_1_NAME);
+        yield (new SocialPostTo)->setAuthorId(self::USER_1_ID)->setAuthorName(self::USER_1_NAME)->setDate(new \DateTime('now'));
     }
 
     private function getSingleUserPosts(): \Traversable
