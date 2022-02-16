@@ -25,11 +25,14 @@ class AveragePostPerUserPerMonth extends AbstractCalculator
      */
     protected function doAccumulate(SocialPostTo $postTo): void
     {
-        $key = $postTo->getAuthorName().' ('.$postTo->getAuthorId().')';
-        if(!isset($this->postCount[$key])){
-            $this->postCount[$key]=0;
+        $timeKey = $postTo->getDate()->format('Y-m');
+        $userKey = $postTo->getAuthorName().' ('.$postTo->getAuthorId().')';
+        $timeKey = $postTo->getDate()->format('Y-m');
+
+        if(!isset($this->postCount[$userKey][$timeKey])){
+            $this->postCount[$userKey][$timeKey]=0;
         }
-        $this->postCount[$key]++;
+        $this->postCount[$userKey][$timeKey]++;
     }
 
     /**
@@ -38,14 +41,16 @@ class AveragePostPerUserPerMonth extends AbstractCalculator
     protected function doCalculate(): StatisticsTo
     {
         $stats = new StatisticsTo();
-        foreach ($this->postCount as $authorUniqueKey => $postCount) {
-            $child = (new StatisticsTo())
-                ->setName($this->parameters->getStatName())
-                ->setSplitPeriod($authorUniqueKey)
-                ->setValue($postCount)
-                ->setUnits(self::UNITS);
+        foreach ($this->postCount as $authorUniqueKey => $authorMonthPosts) {
+            foreach ($authorMonthPosts as $yearMonth => $postCount) {
+                $child = (new StatisticsTo())
+                    ->setName($this->parameters->getStatName())
+                    ->setSplitPeriod($authorUniqueKey.'|'.$yearMonth)
+                    ->setValue($postCount)
+                    ->setUnits(self::UNITS);
 
-            $stats->addChild($child);
+                $stats->addChild($child);
+            }
         }
         return $stats;
     }

@@ -94,7 +94,7 @@ class AveragePostPerUserPerMonthTest extends TestCase
      */
     public function testOneUserWithOnePost($statValues): void
     {
-        $this->assertEquals(1, $statValues[self::USER_1_NAME.' ('.self::USER_1_ID.')']);
+        $this->assertEquals(1, $statValues[self::USER_1_NAME.' ('.self::USER_1_ID.')|2022-02']);
     }
 
     /**
@@ -102,7 +102,8 @@ class AveragePostPerUserPerMonthTest extends TestCase
      */
     public function testOneUserWithFivePosts($statValues): void
     {
-        $this->assertEquals(5, $statValues[self::USER_1_NAME.' ('.self::USER_1_ID.')']);
+        $this->assertEquals(2, $statValues[self::USER_1_NAME.' ('.self::USER_1_ID.')|2022-02']);
+        $this->assertEquals(3, $statValues[self::USER_1_NAME.' ('.self::USER_1_ID.')|2022-01']);
     }
 
     /**
@@ -110,32 +111,36 @@ class AveragePostPerUserPerMonthTest extends TestCase
      */
     public function testTwoUsersWithPosts($statValues): void
     {
-        $this->assertEquals(2, $statValues[self::USER_1_NAME.' ('.self::USER_1_ID.')']);
-        $this->assertEquals(3, $statValues[self::USER_2_NAME.' ('.self::USER_2_ID.')']);
+        $this->assertEquals(1, $statValues[self::USER_1_NAME.' ('.self::USER_1_ID.')|2021-01']);
+        $this->assertEquals(1, $statValues[self::USER_1_NAME.' ('.self::USER_1_ID.')|2021-02']);
+        $this->assertEquals(1, $statValues[self::USER_2_NAME.' ('.self::USER_2_ID.')|2021-01']);
+        $this->assertEquals(1, $statValues[self::USER_2_NAME.' ('.self::USER_2_ID.')|2021-02']);
+        $this->assertEquals(2, $statValues[self::USER_2_NAME.' ('.self::USER_2_ID.')|2021-03']);
     }
 
     private function getSingleUserPost(): \Traversable
     {
-        yield (new SocialPostTo)->setAuthorId(self::USER_1_ID)->setAuthorName(self::USER_1_NAME)->setDate(new \DateTime('now'));
+        yield (new SocialPostTo)->setAuthorId(self::USER_1_ID)->setAuthorName(self::USER_1_NAME)->setDate(new \DateTime('2022-02-01'));
     }
 
     private function getSingleUserPosts(): \Traversable
     {
-        yield (new SocialPostTo)->setAuthorId(self::USER_1_ID)->setAuthorName(self::USER_1_NAME);
-        yield (new SocialPostTo)->setAuthorId(self::USER_1_ID)->setAuthorName(self::USER_1_NAME);
-        yield (new SocialPostTo)->setAuthorId(self::USER_1_ID)->setAuthorName(self::USER_1_NAME);
-        yield (new SocialPostTo)->setAuthorId(self::USER_1_ID)->setAuthorName(self::USER_1_NAME);
-        yield (new SocialPostTo)->setAuthorId(self::USER_1_ID)->setAuthorName(self::USER_1_NAME);
+        yield (new SocialPostTo)->setAuthorId(self::USER_1_ID)->setAuthorName(self::USER_1_NAME)->setDate(new \DateTime('2022-02-01'));
+        yield (new SocialPostTo)->setAuthorId(self::USER_1_ID)->setAuthorName(self::USER_1_NAME)->setDate(new \DateTime('2022-02-01'));
+        yield (new SocialPostTo)->setAuthorId(self::USER_1_ID)->setAuthorName(self::USER_1_NAME)->setDate(new \DateTime('2022-01-01'));
+        yield (new SocialPostTo)->setAuthorId(self::USER_1_ID)->setAuthorName(self::USER_1_NAME)->setDate(new \DateTime('2022-01-01'));
+        yield (new SocialPostTo)->setAuthorId(self::USER_1_ID)->setAuthorName(self::USER_1_NAME)->setDate(new \DateTime('2022-01-01'));
     }
 
     private function getTwoUserPosts(): \Traversable
     {
-        yield (new SocialPostTo)->setAuthorId(self::USER_1_ID)->setAuthorName(self::USER_1_NAME);
-        yield (new SocialPostTo)->setAuthorId(self::USER_2_ID)->setAuthorName(self::USER_2_NAME);
+        yield (new SocialPostTo)->setAuthorId(self::USER_1_ID)->setAuthorName(self::USER_1_NAME)->setDate(new \DateTime('2021-01-01'));
+        yield (new SocialPostTo)->setAuthorId(self::USER_2_ID)->setAuthorName(self::USER_2_NAME)->setDate(new \DateTime('2021-01-01'));
 
-        yield (new SocialPostTo)->setAuthorId(self::USER_1_ID)->setAuthorName(self::USER_1_NAME);
-        yield (new SocialPostTo)->setAuthorId(self::USER_2_ID)->setAuthorName(self::USER_2_NAME);
-        yield (new SocialPostTo)->setAuthorId(self::USER_2_ID)->setAuthorName(self::USER_2_NAME);
+        yield (new SocialPostTo)->setAuthorId(self::USER_1_ID)->setAuthorName(self::USER_1_NAME)->setDate(new \DateTime('2021-02-01'));
+        yield (new SocialPostTo)->setAuthorId(self::USER_2_ID)->setAuthorName(self::USER_2_NAME)->setDate(new \DateTime('2021-02-01'));
+        yield (new SocialPostTo)->setAuthorId(self::USER_2_ID)->setAuthorName(self::USER_2_NAME)->setDate(new \DateTime('2021-03-01'));
+        yield (new SocialPostTo)->setAuthorId(self::USER_2_ID)->setAuthorName(self::USER_2_NAME)->setDate(new \DateTime('2021-03-03'));
     }
 
     private function getEmptyPostSet(): \Traversable
