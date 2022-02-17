@@ -5,7 +5,6 @@ declare(strict_types = 1);
 namespace Tests\unit;
 
 use PHPUnit\Framework\TestCase;
-use SebastianBergmann\Complexity\Calculator;
 use SocialPost\Dto\SocialPostTo;
 use Statistics\Calculator\Factory\StatisticsCalculatorFactory;
 use Statistics\Dto\ParamsTo;
@@ -14,7 +13,7 @@ use Statistics\Enum\StatsEnum;
 use Statistics\Service\StatisticsService;
 
 /**
- * Class ATestTest
+ * Class AveragePostPerUserPerMonthTest
  *
  * @package Tests\unit
  */
