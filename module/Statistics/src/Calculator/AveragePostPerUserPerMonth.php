@@ -25,7 +25,6 @@ class AveragePostPerUserPerMonth extends AbstractCalculator
      */
     protected function doAccumulate(SocialPostTo $postTo): void
     {
-        $timeKey = $postTo->getDate()->format('Y-m');
         $userKey = $postTo->getAuthorName() . ' (' . $postTo->getAuthorId() . ')';
         $timeKey = $postTo->getDate()->format('Y-m');
 
