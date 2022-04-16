@@ -19,4 +19,6 @@ class StatsEnum
     public const AVERAGE_POST_NUMBER_PER_USER = 'average-posts-per-user';
 
     public const AVERAGE_POST_NUMBER_PER_USER_PER_MONTH = 'average-posts-per-user-per-month';
+
+    public const AVERAGE_POST_NUMBER_PER_USER_PER_MONTH_SIMPLIFIED = 'average-posts-per-user-per-month-simplified';
 }

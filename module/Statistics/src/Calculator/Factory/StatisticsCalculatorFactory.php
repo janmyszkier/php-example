@@ -5,6 +5,7 @@ namespace Statistics\Calculator\Factory;
 use Statistics\Calculator\AbstractCalculator;
 use Statistics\Calculator\AveragePostLength;
 use Statistics\Calculator\AveragePostPerUserPerMonth;
+use Statistics\Calculator\AveragePostPerUserPerMonthSimplified;
 use Statistics\Calculator\CalculatorComposite;
 use Statistics\Calculator\CalculatorInterface;
 use Statistics\Calculator\MaxPostLength;
@@ -27,6 +28,7 @@ class StatisticsCalculatorFactory
         StatsEnum::TOTAL_POSTS_PER_WEEK         => TotalPostsPerWeek::class,
         StatsEnum::AVERAGE_POST_NUMBER_PER_USER => NoopCalculator::class,
         StatsEnum::AVERAGE_POST_NUMBER_PER_USER_PER_MONTH => AveragePostPerUserPerMonth::class,
+        StatsEnum::AVERAGE_POST_NUMBER_PER_USER_PER_MONTH_SIMPLIFIED => AveragePostPerUserPerMonthSimplified::class,
     ];
 
     /**
